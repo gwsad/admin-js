@@ -1,0 +1,43 @@
+@import "./mixin.scss";
+@import "./transition.scss";
+@import "./element-plus.scss";
+@import "./sidebar.scss";
+@import "./dark.scss";
+
+/* 自定义全局 CssVar */
+:root {
+  --pure-transition-duration: 0.016s;
+}
+
+/* 灰色模式 */
+.html-grey {
+  filter: grayscale(100%);
+}
+
+/* 色弱模式 */
+.html-weakness {
+  filter: invert(80%);
+}
+
+.bs {
+  margin: 5px 16px;
+  // padding:24px 16px;
+  padding: 20px 16px;
+  box-shadow: 0px 0px 14px 0px rgba(158, 158, 163, 0.17);
+  background-color: rgb(255, 255, 255);
+  border-radius: 2px;
+  position: relative;
+  padding-bottom: 60px;
+}
+.page .content {
+  .el-input,
+  .el-select {
+    width: 200px;
+    margin-right: 16px;
+  }
+}
+.el-dialog {
+  .el-select {
+    width: 100%;
+  }
+}
