@@ -3,22 +3,15 @@ import Motion from "./utils/motion";
 import { message } from "@/utils/message";
 import { useRouter } from "vue-router";
 import { loginRules } from "./utils/rule";
-import { initRouter } from "@/router/utils";
 import { useNav } from "@/layout/hooks/useNav";
 import type { FormInstance } from "element-plus";
 import { useLayout } from "@/layout/hooks/useLayout";
 import { useUserStoreHook } from "@/store/modules/user";
-import { avatar } from "./utils/static";
-import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { ref, reactive, onMounted, onBeforeUnmount, onBeforeMount } from "vue";
-import { useDataThemeChange } from "@/layout/hooks/useDataThemeChange";
 import { MathUUid } from "@/utils/index";
 import { getImgCode } from "@/api/user";
-import dayIcon from "@/assets/svg/day.svg?component";
-import darkIcon from "@/assets/svg/dark.svg?component";
-import Lock from "@iconify-icons/ri/lock-fill";
-import User from "@iconify-icons/ri/user-3-fill";
-import bg from "@/assets/login/bg.png";
+import companyIcon from "@/assets/login/project-icon.png";
+import loginLeft from "@/assets/login/project-login-left.png";
 
 defineOptions({
   name: "Login"
@@ -29,8 +22,6 @@ const router = useRouter();
 const { initStorage } = useLayout();
 initStorage();
 
-const { dataTheme, dataThemeChange } = useDataThemeChange();
-dataThemeChange();
 const { title } = useNav();
 
 const ruleForm = reactive({
@@ -66,11 +57,6 @@ const onLogin = async (formEl: FormInstance | undefined) => {
                 password: ruleForm.password
               })
             );
-            // 获取后端路由
-            // initRouter().then(() => {
-            //   router.push("/");
-            //   message("登录成功", { type: "success" });
-            // });
             router.push("/");
             message("登录成功", { type: "success" });
           }
@@ -130,85 +116,62 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="select-none">
-    <div class="flex-c absolute right-5 top-3">
-      <!-- 主题 -->
-      <el-switch
-        v-model="dataTheme"
-        inline-prompt
-        :active-icon="dayIcon"
-        :inactive-icon="darkIcon"
-        @change="dataThemeChange"
-      />
-    </div>
+    <el-image class="login-icon" :src="companyIcon" fit="cover" />
     <div class="login-container">
-      <el-image class="login-bg" :src="bg" fit="cover" />
-      <div class="login-box">
-        <div class="login-form">
-          <avatar class="avatar" />
-          <Motion>
-            <h2 class="outline-none">{{ title }}</h2>
+      <el-image class="login-container__left" :src="loginLeft" fit="cover" />
+      <div class="login-container__right">
+        <h2 class="outline-none">{{ title }}</h2>
+        <el-form
+          ref="ruleFormRef"
+          :model="ruleForm"
+          :rules="loginRules"
+          size="large"
+        >
+          <Motion :delay="100">
+            <el-form-item
+              :rules="[
+                {
+                  required: true,
+                  message: '请输入账号',
+                  trigger: 'blur'
+                }
+              ]"
+              prop="mobile"
+            >
+              <el-input v-model="ruleForm.mobile" placeholder="账号" />
+            </el-form-item>
           </Motion>
 
-          <el-form
-            ref="ruleFormRef"
-            :model="ruleForm"
-            :rules="loginRules"
-            size="large"
-          >
-            <Motion :delay="100">
-              <el-form-item
-                :rules="[
-                  {
-                    required: true,
-                    message: '请输入账号',
-                    trigger: 'blur'
-                  }
-                ]"
-                prop="mobile"
-              >
-                <el-input
-                  clearable
-                  v-model="ruleForm.mobile"
-                  placeholder="账号"
-                  :prefix-icon="useRenderIcon(User)"
-                />
-              </el-form-item>
-            </Motion>
-
-            <Motion :delay="150">
-              <el-form-item prop="password">
-                <el-input
-                  clearable
-                  show-password
-                  v-model="ruleForm.password"
-                  placeholder="密码"
-                  :prefix-icon="useRenderIcon(Lock)"
-                />
-              </el-form-item>
-            </Motion>
-            <!-- 验证码 -->
-            <div class="verification" :class="{ showImg: showImgCode }">
-              <el-input v-model="imgCode" placeholder="请输入验证码" />
-              <img
-                v-show="imgCodeUrl"
-                :src="imgCodeUrl"
-                @click="getImageCode()"
+          <Motion :delay="150">
+            <el-form-item prop="password">
+              <el-input
+                show-password
+                v-model="ruleForm.password"
+                placeholder="密码"
               />
-            </div>
+            </el-form-item>
+          </Motion>
+          <!-- 验证码 -->
+          <div class="verification" :class="{ showImg: showImgCode }">
+            <el-input v-model="imgCode" placeholder="请输入验证码" />
+            <img
+              v-show="imgCodeUrl"
+              :src="imgCodeUrl"
+              @click="getImageCode()"
+            />
+          </div>
 
-            <Motion :delay="350">
-              <el-button
-                class="w-full mt-4"
-                size="default"
-                type="primary"
-                :loading="loading"
-                @click="onLogin(ruleFormRef)"
-              >
-                登录
-              </el-button>
-            </Motion>
-          </el-form>
-        </div>
+          <Motion :delay="350">
+            <el-button
+              class="w-full mt-4 login-btn"
+              size="default"
+              :loading="loading"
+              @click="onLogin(ruleFormRef)"
+            >
+              登录
+            </el-button>
+          </Motion>
+        </el-form>
       </div>
     </div>
   </div>
@@ -219,6 +182,42 @@ onBeforeUnmount(() => {
 </style>
 
 <style lang="scss" scoped>
+.select-none {
+  background: #eff4ff;
+  min-height: 100vh;
+}
+.login-container {
+  width: 1080px;
+  height: 590px;
+  background: #ffffff;
+  border-radius: 15px;
+  margin: 0 auto;
+  display: flex;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.login-container__left {
+  width: 50%;
+  height: 100%;
+  border-radius: 15px 0 0 15px;
+}
+.login-container__right {
+  margin: auto;
+  text-align: center;
+  h2 {
+    margin-bottom: 48px;
+  }
+}
+
+.login-btn {
+  height: 40px;
+  background: #165dff;
+  border-radius: 4px;
+  color: #ffffff;
+}
+
 :deep(.el-input-group__append, .el-input-group__prepend) {
   padding: 0;
 }
@@ -245,9 +244,12 @@ onBeforeUnmount(() => {
 <style lang="scss">
 .verification {
   .el-input {
-    width: 162px;
+    width: 360px;
     margin-right: 8px;
     height: 100%;
+  }
+  .el-input__wrapper {
+    padding: 0;
   }
 
   .el-input__inner {

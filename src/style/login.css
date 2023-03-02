@@ -12,9 +12,10 @@
   display: flex;
 }
 
-.login-bg {
-  width: 68vw;
-  height: 100vh;
+.login-icon {
+  width: 174px;
+  height: 59px;
+  margin: 32px 0 0 72px;
 }
 
 .img {
