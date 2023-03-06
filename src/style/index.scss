@@ -29,15 +29,48 @@
   position: relative;
   padding-bottom: 60px;
 }
+
 .page .content {
+
   .el-input,
   .el-select {
     width: 200px;
     margin-right: 16px;
   }
 }
+
 .el-dialog {
   .el-select {
     width: 100%;
+  }
+}
+
+.common-input {
+  background: #F4F5F7 !important;
+  overflow: hidden;
+
+  .el-input__wrapper {
+    width: 100%;
+    height: 100%;
+    background: none;
+    padding: 0 !important;
+    box-shadow: none;
+
+  }
+
+  input {
+    width: 100%;
+    height: 100%;
+    padding: 0 15px;
+
+    &:hover {
+      background: #e5e6ec;
+      cursor: text;
+    }
+
+    &:focus {
+      border: 1px solid #165dff;
+      background: #ffffff;
+    }
   }
 }

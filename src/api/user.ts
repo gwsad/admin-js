@@ -34,6 +34,15 @@ export const getLogin = (data?: object) => {
     params: data
   });
 };
+
+// 获取验证码
+export const getPhoneCode = (mobile?: string) => {
+  return http.request<UserResult>(
+    "get",
+    `/api-user/user/sendLoginSMS?mobile=${mobile}`
+  );
+};
+
 // 获取图形验证码
 export const getImgCode = (code?: string) => {
   return http.request<UserResult>("get", `/api-uaa/validata/code/${code}`, {

@@ -62,7 +62,7 @@ class PureHttp {
           return config;
         }
         /** 请求白名单，放置一些不需要token的接口（通过设置请求白名单，防止token过期后再请求造成的死循环问题） */
-        const whiteList = ["/api-uaa/oauth/token", "/login"];
+        const whiteList = ["/api-uaa/oauth/token", "/login", "/sendLoginSMS"];
 
         // 添加平台标识
         config.headers["tenant"] = defaultProjectConfig.clientId;
@@ -128,6 +128,12 @@ class PureHttp {
         return response.data;
       },
       (error: PureHttpError) => {
+        error.response.data.error === "Unauthorized" &&
+          ElMessage({
+            message: "暂无权限，请联系管理员",
+            duration: 1000,
+            type: "error"
+          });
         const $error = error;
         $error.isCancelRequest = Axios.isCancel($error);
         // 关闭进度条动画

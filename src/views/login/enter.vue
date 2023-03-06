@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import Motion from "./utils/motion";
 import { message } from "@/utils/message";
 import { useRouter } from "vue-router";
 import { loginRules } from "./utils/rule";
-import { useNav } from "@/layout/hooks/useNav";
 import type { FormInstance } from "element-plus";
 import { useLayout } from "@/layout/hooks/useLayout";
 import { useUserStoreHook } from "@/store/modules/user";
 import { ref, reactive, onMounted, onBeforeUnmount, onBeforeMount } from "vue";
 import { MathUUid } from "@/utils/index";
-import { getImgCode } from "@/api/user";
+import { getImgCode, getPhoneCode } from "@/api/user";
 import companyIcon from "@/assets/login/project-icon.png";
 import loginLeft from "@/assets/login/project-login-left.png";
+import { regMobile, regCode } from "./utils/rule";
 
 defineOptions({
   name: "Login"
@@ -22,41 +21,29 @@ const router = useRouter();
 const { initStorage } = useLayout();
 initStorage();
 
-const { title } = useNav();
-
 const ruleForm = reactive({
   mobile: "",
-  password: "",
+  smsCode: "",
   automaticLogin: 7,
-  grant_type: "mobile_password"
+  grant_type: "sms_code"
 });
 
 const imgCode = ref(""); // 验证码
 const showImgCode = ref(false); // 是否显示验证码
 const imgCodeUrl = ref(""); // 验证码图片链接
 const deviceId = ref(""); // uuid用来登录
+const btnDesc = ref("获取验证码"); // 按钮描述
+const timer = ref(null); // 定时器
 
 const onLogin = async (formEl: FormInstance | undefined) => {
   loading.value = true;
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      showImgCode.value === true &&
-        Object.assign(ruleForm, {
-          validCode: imgCode.value,
-          deviceId: deviceId.value
-        });
       useUserStoreHook()
         .loginByUsername(ruleForm)
         .then(res => {
           if (res["resp_code"] === 0) {
-            window.localStorage.setItem(
-              "userLogin",
-              JSON.stringify({
-                mobile: ruleForm.mobile,
-                password: ruleForm.password
-              })
-            );
             router.push("/");
             message("登录成功", { type: "success" });
           }
@@ -65,11 +52,9 @@ const onLogin = async (formEl: FormInstance | undefined) => {
           if (["3011", "3006", "3007"].includes(e.resp_code)) {
             showImgCode.value = true;
             getImageCode();
-          } else {
-            message(e.resp_msg, { type: "error" });
           }
           if (showImgCode.value && e.resp_code === "3004") {
-            ruleForm.password = "";
+            ruleForm.smsCode = "";
             imgCode.value = "";
             showImgCode.value = true;
             getImageCode();
@@ -98,12 +83,31 @@ async function getImageCode() {
   imgCodeUrl.value = window.URL.createObjectURL(blob);
 }
 
-onBeforeMount(() => {
-  ruleForm.mobile =
-    JSON.parse(window.localStorage.getItem("userLogin") || "{}").mobile || "";
-  ruleForm.password =
-    JSON.parse(window.localStorage.getItem("userLogin") || "{}").password || "";
-});
+// 倒计时
+const countDown = async () => {
+  if (ruleForm.mobile === "") {
+    message("请输入手机号", { type: "error" });
+    return false;
+  }
+  if (!regMobile.test(ruleForm.mobile)) {
+    return false;
+  }
+  try {
+    await getPhoneCode(ruleForm.mobile);
+    btnDesc.value = "60s 后可重发";
+    timer.value = setInterval(() => {
+      let seconds: any = btnDesc.value.replace("s 后可重发", "");
+      seconds--;
+      btnDesc.value = seconds + "s 后可重发";
+      if (seconds === 0) {
+        clearInterval(timer.value);
+        btnDesc.value = "重新获取";
+      }
+    }, 1000);
+  } catch (error) {
+    return false;
+  }
+};
 
 onMounted(() => {
   window.document.addEventListener("keypress", onkeypress);
@@ -120,57 +124,53 @@ onBeforeUnmount(() => {
     <div class="login-container">
       <el-image class="login-container__left" :src="loginLeft" fit="cover" />
       <div class="login-container__right">
-        <h2 class="outline-none">{{ title }}</h2>
+        <h2 class="outline-none" style="text-align: center">短信登录</h2>
         <el-form
           ref="ruleFormRef"
           :model="ruleForm"
           :rules="loginRules"
           size="large"
         >
-          <Motion :delay="100">
-            <el-form-item
-              :rules="[
-                {
-                  required: true,
-                  message: '请输入账号',
-                  trigger: 'blur'
-                }
-              ]"
-              prop="mobile"
-            >
-              <el-input v-model="ruleForm.mobile" placeholder="账号" />
-            </el-form-item>
-          </Motion>
-
-          <Motion :delay="150">
-            <el-form-item prop="password">
-              <el-input
-                show-password
-                v-model="ruleForm.password"
-                placeholder="密码"
-              />
-            </el-form-item>
-          </Motion>
-          <!-- 验证码 -->
-          <div class="verification" :class="{ showImg: showImgCode }">
-            <el-input v-model="imgCode" placeholder="请输入验证码" />
-            <img
-              v-show="imgCodeUrl"
-              :src="imgCodeUrl"
-              @click="getImageCode()"
+          <el-form-item
+            :rules="[
+              {
+                required: true,
+                message: '请输入手机号',
+                trigger: 'blur'
+              }
+            ]"
+            prop="mobile"
+          >
+            <el-input
+              class="common-input special-input"
+              v-model="ruleForm.mobile"
+              maxlength="11"
+              placeholder="请输入手机号"
             />
-          </div>
+          </el-form-item>
 
-          <Motion :delay="350">
-            <el-button
-              class="w-full mt-4 login-btn"
-              size="default"
-              :loading="loading"
-              @click="onLogin(ruleFormRef)"
+          <el-form-item prop="smsCode" class="special-form">
+            <el-input
+              class="common-input special-input"
+              v-model="ruleForm.smsCode"
+              maxlength="6"
+              placeholder="请输入验证码"
+            />
+            <span
+              @click="countDown"
+              :class="{ disabled: btnDesc.indexOf('s') !== -1 }"
+              >{{ btnDesc }}</span
             >
-              登录
-            </el-button>
-          </Motion>
+          </el-form-item>
+
+          <el-button
+            class="w-full mt-4 login-btn"
+            size="default"
+            :loading="loading"
+            @click="onLogin(ruleFormRef)"
+          >
+            登录
+          </el-button>
         </el-form>
       </div>
     </div>
@@ -205,10 +205,26 @@ onBeforeUnmount(() => {
 }
 .login-container__right {
   margin: auto;
-  text-align: center;
+  text-align: left;
+  transition: all 1s linear;
   h2 {
     margin-bottom: 48px;
   }
+}
+
+.special-form {
+  position: relative;
+  margin-bottom: 8px;
+  span {
+    position: absolute;
+    right: 16px;
+    color: #165dff;
+    cursor: pointer;
+  }
+}
+.special-input {
+  width: 360px;
+  height: 40px;
 }
 
 .login-btn {
@@ -218,23 +234,11 @@ onBeforeUnmount(() => {
   color: #ffffff;
 }
 
+.disabled {
+  color: #999999 !important;
+}
 :deep(.el-input-group__append, .el-input-group__prepend) {
   padding: 0;
-}
-
-.verification {
-  height: 0px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.2s linear;
-  overflow: hidden;
-
-  img {
-    width: 100px;
-    height: 100%;
-    cursor: pointer;
-  }
 }
 
 .showImg {
@@ -242,19 +246,10 @@ onBeforeUnmount(() => {
 }
 </style>
 <style lang="scss">
-.verification {
-  .el-input {
-    width: 360px;
-    margin-right: 8px;
-    height: 100%;
-  }
-  .el-input__wrapper {
-    padding: 0;
-  }
-
-  .el-input__inner {
-    height: 100%;
-    background: none;
-  }
+.el-input--large {
+  --el-input-height: none;
+}
+.el-input {
+  display: inline-block;
 }
 </style>
