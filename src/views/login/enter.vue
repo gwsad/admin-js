@@ -5,12 +5,12 @@ import { loginRules } from "./utils/rule";
 import type { FormInstance } from "element-plus";
 import { useLayout } from "@/layout/hooks/useLayout";
 import { useUserStoreHook } from "@/store/modules/user";
-import { ref, reactive, onMounted, onBeforeUnmount, onBeforeMount } from "vue";
+import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import { MathUUid } from "@/utils/index";
 import { getImgCode, getPhoneCode } from "@/api/user";
 import companyIcon from "@/assets/login/project-icon.png";
 import loginLeft from "@/assets/login/project-login-left.png";
-import { regMobile, regCode } from "./utils/rule";
+import { regMobile } from "./utils/rule";
 
 defineOptions({
   name: "Login"
