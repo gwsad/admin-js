@@ -4,7 +4,7 @@ export default {
   path: "/",
   name: "Home",
   component: Layout,
-  redirect: "/welcome",
+  redirect: "/home",
   meta: {
     icon: "homeFilled",
     title: "首页",
@@ -12,8 +12,8 @@ export default {
   },
   children: [
     {
-      path: "/welcome",
-      name: "Welcome",
+      path: "/home",
+      name: "Home",
       component: () => import("@/views/welcome/enter.vue"),
       meta: {
         title: "首页"
