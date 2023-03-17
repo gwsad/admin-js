@@ -64,8 +64,6 @@ class PureHttp {
         /** 请求白名单，放置一些不需要token的接口（通过设置请求白名单，防止token过期后再请求造成的死循环问题） */
         const whiteList = ["/api-uaa/oauth/token", "/login", "/sendLoginSMS"];
 
-        // 添加平台标识
-        config.headers["tenant"] = defaultProjectConfig.clientId;
         // 定义请求链接
         config.url = `${VITE_GLOB_API_URL}${config.url}`;
         // 添加默认token

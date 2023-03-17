@@ -6,8 +6,8 @@ import Axios, {
 } from "axios";
 
 export const defaultProjectConfig = {
-  clientId: "EmpowerT", // 应用id
-  clientSecret: "EmpowerT" // 应用秘钥
+  clientId: "jingshun", // 应用id
+  clientSecret: "jingshun" // 应用秘钥
 };
 
 export type resultType = {
