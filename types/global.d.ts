@@ -4,7 +4,6 @@ import type {
   PropType as VuePropType,
   ComponentPublicInstance
 } from "vue";
-import type { ECharts } from "echarts";
 import type { IconifyIcon } from "@iconify/vue";
 import type { TableColumns } from "@pureadmin/table";
 import { type RouteComponent, type RouteLocationNormalized } from "vue-router";
@@ -69,7 +68,7 @@ declare global {
   /**
    *  继承 `@pureadmin/table` 的 `TableColumns` ，方便全局直接调用
    */
-  interface TableColumnList extends Array<TableColumns> {}
+  interface TableColumnList extends Array<TableColumns> { }
 
   /**
    * 对应 `public/serverConfig.json` 文件的类型声明
@@ -248,7 +247,6 @@ declare global {
    * 平台里所有组件实例都能访问到的全局属性对象的类型声明
    */
   interface GlobalPropertiesApi {
-    $echarts: ECharts;
     $storage: ResponsiveStorage;
     $config: ServerConfigs;
   }

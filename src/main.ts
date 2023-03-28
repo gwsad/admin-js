@@ -5,12 +5,10 @@ import ElementPlus from "element-plus";
 import { getServerConfig } from "./config";
 import { createApp, Directive } from "vue";
 import { MotionPlugin } from "@vueuse/motion";
-// import { useEcharts } from "@/plugins/echarts";
 import { injectResponsiveStorage } from "@/utils/responsive";
 import JsonViewer from "vue3-json-viewer";
+import SrmTable from "@/components/SrmTable/enter.vue";
 
-// import Table from "@pureadmin/table";
-// import PureDescriptions from "@pureadmin/descriptions";
 import "vue3-json-viewer/dist/index.css";
 
 // 引入重置样式
@@ -35,7 +33,6 @@ Object.keys(directives).forEach(key => {
   app.directive(key, (directives as { [key: string]: Directive })[key]);
 });
 
-// 全局注册`@iconify/vue`图标库
 import {
   IconifyIconOffline,
   IconifyIconOnline,
@@ -44,8 +41,8 @@ import {
 app.component("IconifyIconOffline", IconifyIconOffline);
 app.component("IconifyIconOnline", IconifyIconOnline);
 app.component("FontIcon", FontIcon);
+app.component("SrmTable", SrmTable);
 app.use(JsonViewer);
-// 全局注册按钮级别权限组件
 import { Auth } from "@/components/ReAuth";
 app.component("Auth", Auth);
 
@@ -55,8 +52,5 @@ getServerConfig(app).then(async config => {
   injectResponsiveStorage(app, config);
   setupStore(app);
   app.use(MotionPlugin).use(ElementPlus);
-  // .use(useEcharts);
-  // .use(Table);
-  // .use(PureDescriptions);
   app.mount("#app");
 });

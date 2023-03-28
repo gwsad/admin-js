@@ -151,29 +151,6 @@ Print.prototype = {
     };
   },
   /**
-   * echarts printing
-   * @param {Object} doc iframe window
-   */
-  drawEchartImg(doc): Promise<void> {
-    return new Promise<void>(resolve => {
-      if (this.conf.echartDomArr && this.conf.echartDomArr.length > 0) {
-        this.conf.echartDomArr.forEach(e => {
-          const dom = doc.querySelector("#" + e.$el.id);
-          const img = new Image();
-          const w = dom.offsetWidth + "px";
-          const H = dom.offsetHeight + "px";
-
-          img.style.width = w;
-          img.style.height = H;
-          img.src = e.imgSrc;
-          dom.innerHTML = "";
-          dom.appendChild(img);
-        });
-      }
-      resolve();
-    });
-  },
-  /**
     Print
   */
   toPrint: function (frameWindow): void {

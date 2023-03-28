@@ -6,8 +6,8 @@ import Axios, {
 } from "axios";
 
 export const defaultProjectConfig = {
-  clientId: "jingshun", // 应用id
-  clientSecret: "jingshun" // 应用秘钥
+  clientId: "iReport-front", // 应用id
+  clientSecret: "iReport-front" // 应用秘钥
 };
 
 export type resultType = {

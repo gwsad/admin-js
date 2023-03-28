@@ -5,5 +5,5 @@ defineOptions({
 </script>
 
 <template>
-  <h1>欢迎景顺</h1>
+  <h1>欢迎港回收</h1>
 </template>

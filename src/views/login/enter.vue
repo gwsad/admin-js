@@ -7,10 +7,8 @@ import { useLayout } from "@/layout/hooks/useLayout";
 import { useUserStoreHook } from "@/store/modules/user";
 import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import { MathUUid } from "@/utils/index";
-import { getImgCode, getPhoneCode } from "@/api/user";
-import companyIcon from "@/assets/login/project-icon.png";
+import { getImgCode } from "@/api/user";
 import loginLeft from "@/assets/login/project-login-left.png";
-import { regMobile } from "./utils/rule";
 
 defineOptions({
   name: "Login"
@@ -23,17 +21,15 @@ initStorage();
 
 const ruleForm = reactive({
   mobile: "",
-  smsCode: "",
+  password: "",
   automaticLogin: 7,
-  grant_type: "sms_code"
+  grant_type: "mobile_password"
 });
 
 const imgCode = ref(""); // 验证码
 const showImgCode = ref(false); // 是否显示验证码
 const imgCodeUrl = ref(""); // 验证码图片链接
 const deviceId = ref(""); // uuid用来登录
-const btnDesc = ref("获取验证码"); // 按钮描述
-const timer = ref(null); // 定时器
 
 const onLogin = async (formEl: FormInstance | undefined) => {
   loading.value = true;
@@ -54,7 +50,7 @@ const onLogin = async (formEl: FormInstance | undefined) => {
             getImageCode();
           }
           if (showImgCode.value && e.resp_code === "3004") {
-            ruleForm.smsCode = "";
+            ruleForm.password = "";
             imgCode.value = "";
             showImgCode.value = true;
             getImageCode();
@@ -83,32 +79,6 @@ async function getImageCode() {
   imgCodeUrl.value = window.URL.createObjectURL(blob);
 }
 
-// 倒计时
-const countDown = async () => {
-  if (ruleForm.mobile === "") {
-    message("请输入手机号", { type: "error" });
-    return false;
-  }
-  if (!regMobile.test(ruleForm.mobile)) {
-    return false;
-  }
-  try {
-    await getPhoneCode(ruleForm.mobile);
-    btnDesc.value = "60s 后可重发";
-    timer.value = setInterval(() => {
-      let seconds: any = btnDesc.value.replace("s 后可重发", "");
-      seconds--;
-      btnDesc.value = seconds + "s 后可重发";
-      if (seconds === 0) {
-        clearInterval(timer.value);
-        btnDesc.value = "重新获取";
-      }
-    }, 1000);
-  } catch (error) {
-    return false;
-  }
-};
-
 onMounted(() => {
   window.document.addEventListener("keypress", onkeypress);
 });
@@ -120,11 +90,10 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="select-none">
-    <el-image class="login-icon" :src="companyIcon" fit="cover" />
     <div class="login-container">
       <el-image class="login-container__left" :src="loginLeft" fit="cover" />
       <div class="login-container__right">
-        <h2 class="outline-none" style="text-align: center">短信登录</h2>
+        <h2 class="outline-none" style="text-align: center">登录</h2>
         <el-form
           ref="ruleFormRef"
           :model="ruleForm"
@@ -149,18 +118,12 @@ onBeforeUnmount(() => {
             />
           </el-form-item>
 
-          <el-form-item prop="smsCode" class="special-form">
+          <el-form-item prop="password" class="special-form">
             <el-input
               class="common-input special-input"
-              v-model="ruleForm.smsCode"
-              maxlength="6"
-              placeholder="请输入验证码"
+              v-model="ruleForm.password"
+              placeholder="请输入密码"
             />
-            <span
-              @click="countDown"
-              :class="{ disabled: btnDesc.indexOf('s') !== -1 }"
-              >{{ btnDesc }}</span
-            >
           </el-form-item>
 
           <el-button
