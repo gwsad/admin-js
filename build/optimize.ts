@@ -6,15 +6,9 @@
  */
 const include = [
   "qs",
-  "mitt",
   "dayjs",
   "axios",
-  "pinia",
-  "js-cookie",
-  "@vueuse/core",
-  "@pureadmin/utils",
-  "responsive-storage",
-  "element-resize-detector"
+  "js-cookie"
 ];
 
 /**

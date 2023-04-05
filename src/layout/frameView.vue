@@ -2,10 +2,6 @@
 import { useRoute } from "vue-router";
 import { ref, unref, onMounted, nextTick } from "vue";
 
-defineOptions({
-  name: "FrameView"
-});
-
 const loading = ref(true);
 const currentRoute = useRoute();
 const frameSrc = ref<string>("");

@@ -7,9 +7,6 @@ import { ref, reactive, onMounted, onBeforeUnmount } from "vue";
 import loginLeft from "@/assets/login/project-login-left.png";
 import { login } from "@/api/user";
 
-defineOptions({
-  name: "Login"
-});
 const loading = ref(false);
 const ruleFormRef = ref<FormInstance>();
 const router = useRouter();
