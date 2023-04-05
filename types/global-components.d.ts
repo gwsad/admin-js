@@ -21,7 +21,6 @@ declare module "vue" {
     ElAside: typeof import("element-plus")["ElAside"];
     ElAutocomplete: typeof import("element-plus")["ElAutocomplete"];
     ElAvatar: typeof import("element-plus")["ElAvatar"];
-    ElBacktop: typeof import("element-plus")["ElBacktop"];
     ElBadge: typeof import("element-plus")["ElBadge"];
     ElBreadcrumb: typeof import("element-plus")["ElBreadcrumb"];
     ElBreadcrumbItem: typeof import("element-plus")["ElBreadcrumbItem"];
@@ -121,4 +120,4 @@ declare module "vue" {
   }
 }
 
-export {};
+export { };
