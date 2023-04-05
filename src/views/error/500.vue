@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import noServer from "@/assets/status/500.svg?component";
-"500"
-});
 </script>
 
 <template>
