@@ -1,16 +1,14 @@
 <script lang="ts" setup>
-import { reactive, ref, onBeforeMount, nextTick } from "vue";
+import { ref, onBeforeMount, nextTick } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { TableConfig } from "./config/table";
-import { SearchForm } from "./config/filter";
-import { getCardType, getCardList, setHot } from "@/api/user";
+import { getCardType, getCardList, setHot, addCard } from "@/api/user";
+const { VITE_GLOB_API_URL } = import.meta.env;
 const tableConfig: any = TableConfig;
-const searchForm: any = SearchForm;
 const sourceData: any = ref([]);
 const reqData: any = ref({}); // 请求参数
-const form: any = reactive({}); // 筛选项
 const dialogVisible = ref(false); // 卡片设置弹窗
-const total = ref(0); // 总条数
+const UploadUrl = VITE_GLOB_API_URL + "/admin/image/upload";
 onBeforeMount(() => {
   getCardTypeListFn();
 });
@@ -35,9 +33,7 @@ const getCardListFn = async () => {
 
 const cardInfo = ref({
   name: "",
-  icon: "",
-  price: "",
-  discount: "",
+  discount: null,
   facevalue: [],
   imageUrl: ""
 }); // 卡片信息
@@ -50,12 +46,6 @@ const onHandleClick = value => {
 const onCurrentChange = type => {
   console.log("type", type);
 };
-
-// 筛选项发生改变
-function onSearch(data: any) {
-  reqData.value = JSON.stringify(data) === "{}" ? {} : data;
-  getCardListFn();
-}
 
 // 修改卡片是否热门
 const onChangeHot = (data: any) => {
@@ -79,8 +69,17 @@ const optionDialog = () => {
 const onDelete = (data: any) => {
   console.log("data", data);
   ElMessageBox.confirm("确认删除该卡片吗？", { type: "warning" })
-    .then(() => {
-      console.log("删除成功");
+    .then(async () => {
+      const _data = {
+        name: data.name,
+        image: data.image,
+        discount: data.discount,
+        order: data.order,
+        isHot: data.isHot,
+        isDelete: 1
+      };
+      await setHot(data._id, _data);
+      getCardListFn();
     })
     .catch(() => {
       console.log("取消删除");
@@ -88,32 +87,40 @@ const onDelete = (data: any) => {
 };
 
 // 确认添加卡片
-const onAddCard = () => {
-  console.log("cardInfo", cardInfo.value);
+const onAddCard = async () => {
+  cardInfo.value.facevalue = dynamicTags.value;
   if (!cardInfo.value.name) {
     ElMessage.error("请输入卡片名称");
-    return;
-  }
-  if (!cardInfo.value.price) {
-    ElMessage.error("请输入卡片价格");
     return;
   }
   if (!cardInfo.value.discount) {
     ElMessage.error("请输入卡片折扣");
     return;
   }
+  if (cardInfo.value.discount > 100) {
+    ElMessage.error("卡片折扣输入不规范");
+    return;
+  }
   if (!cardInfo.value.facevalue.length) {
     ElMessage.error("请输入卡片面值");
     return;
   }
+  const _data = {
+    name: cardInfo.value.name,
+    image: cardInfo.value.imageUrl,
+    discount: Number(cardInfo.value.discount),
+    facevalues: cardInfo.value.facevalue,
+    order: 0,
+    isHot: 0
+  };
+  await addCard(activeName.value, _data);
+  getCardListFn();
   dialogVisible.value = false;
 };
 
 // 成功上传卡片
-const handleAvatarSuccess = (res: any, file: any) => {
-  console.log("res", res);
-  console.log("file", file);
-  cardInfo.value.icon = res.data;
+const handleAvatarSuccess = (res: any) => {
+  cardInfo.value.imageUrl = VITE_GLOB_API_URL + res.data.filename;
 };
 
 //
@@ -134,7 +141,7 @@ const showInput = () => {
 
 const handleInputConfirm = () => {
   if (inputValue.value) {
-    dynamicTags.value.push(inputValue.value);
+    dynamicTags.value.push(Number(inputValue.value));
   }
   inputVisible.value = false;
   inputValue.value = "";
@@ -210,13 +217,6 @@ const onHot = (data: any) => {
         <el-form-item label="卡片名称：">
           <el-input v-model="cardInfo.name" placeholder="请输入卡片名称" />
         </el-form-item>
-        <el-form-item label="卡片价格：">
-          <el-input
-            v-model="cardInfo.price"
-            type="number"
-            placeholder="请输入卡片价格"
-          />
-        </el-form-item>
         <el-form-item label="卡片折扣：">
           <el-input
             v-model="cardInfo.discount"
@@ -239,6 +239,7 @@ const onHot = (data: any) => {
             v-if="inputVisible"
             ref="InputRef"
             v-model="inputValue"
+            type="number"
             class="ml-1 w-10"
             size="small"
             @keyup.enter="handleInputConfirm"
@@ -256,7 +257,7 @@ const onHot = (data: any) => {
         <el-form-item label="卡片ICON：">
           <el-upload
             class="avatar-uploader"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            :action="UploadUrl"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
           >
@@ -268,6 +269,11 @@ const onHot = (data: any) => {
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
         </el-form-item>
+        <!-- <form method="POST" :action="UploadUrl" enctype="multipart/form-data">
+          title: <input name="title" />
+          file: <input name="file" type="file" />
+          <button type="submit">Upload</button>
+        </form> -->
       </el-form>
       <template #footer>
         <span class="dialog-footer">

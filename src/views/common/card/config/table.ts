@@ -1,9 +1,31 @@
-import { ElButton, ElSwitch } from "element-plus";
+import { ElButton, ElImage } from "element-plus";
 // facevalues
 export const TableConfig = [
   { prop: "categoryId", label: "卡片ID" },
   { prop: "name", label: "卡片名称" },
-  { prop: "region", label: "卡片icon" },
+  {
+    prop: "region",
+    label: "卡片icon",
+    slots: [
+      {
+        render(h, vm, row) {
+          let _face = "";
+          row.facevalues.forEach((item: any) => {
+            _face += item + " ";
+          });
+          return [
+            h(
+              ElImage,
+              {
+                src: row.image
+              },
+              _face
+            )
+          ];
+        }
+      }
+    ]
+  },
   { prop: "discount", label: "折扣" },
   {
     prop: "discount",
