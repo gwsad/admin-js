@@ -6,8 +6,7 @@
   "repository": "git@github.com:xiaoxian521/pure-admin-thin.git",
   "license": "MIT",
   "scripts": {
-    "dev": "NODE_OPTIONS=--max-old-space-size=4096 vite",
-    "serve": "pnpm dev",
+    "dev": "vite",
     "build": "vite build",
     "build:dev": "rimraf dist && vite build --mode dev",
     "report": "rimraf dist && vite build",
