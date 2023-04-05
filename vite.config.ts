@@ -1,21 +1,21 @@
 import dayjs from "dayjs";
+import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 import pkg from "./package.json";
 import { warpperEnv } from "./build";
 import { getPluginsList } from "./build/plugins";
 import { include, exclude } from "./build/optimize";
-import { UserConfigExport, ConfigEnv, loadEnv } from "vite";
+import { loadEnv } from "vite";
 
 /** 当前执行node命令时文件夹的地址（工作目录） */
-const root: string = process.cwd();
+const root = process.cwd();
 
 /** 路径查找 */
-const pathResolve = (dir: string): string => {
+const pathResolve = dir => {
   return resolve(__dirname, ".", dir);
 };
-
 /** 设置别名 */
-const alias: Record<string, string> = {
+const alias = {
   "@": pathResolve("src"),
   "@build": pathResolve("build")
 };
@@ -26,7 +26,7 @@ const __APP_INFO__ = {
   lastBuildTime: dayjs(new Date()).format("YYYY-MM-DD HH:mm:ss")
 };
 
-export default ({ command, mode }: ConfigEnv): UserConfigExport => {
+export default ({ command, mode }) => {
   const { VITE_CDN, VITE_PORT, VITE_COMPRESSION, VITE_PUBLIC_PATH } =
     warpperEnv(loadEnv(mode, root));
   return {
@@ -34,6 +34,15 @@ export default ({ command, mode }: ConfigEnv): UserConfigExport => {
     root,
     resolve: {
       alias
+    },
+    proxy: {
+      "/": {
+        target: "192.168.31.136:7001",
+        changeOrigin: true, // 设置这个参数可以避免跨域
+        pathRewrite: {
+          "^/": "/"
+        }
+      }
     },
     // 服务端渲染
     server: {

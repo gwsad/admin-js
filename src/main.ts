@@ -8,6 +8,7 @@ import { MotionPlugin } from "@vueuse/motion";
 import { injectResponsiveStorage } from "@/utils/responsive";
 import JsonViewer from "vue3-json-viewer";
 import SrmTable from "@/components/SrmTable/enter.vue";
+import SrmFilter from "@/components/SrmFilter/enter.vue";
 
 import "vue3-json-viewer/dist/index.css";
 
@@ -42,6 +43,7 @@ app.component("IconifyIconOffline", IconifyIconOffline);
 app.component("IconifyIconOnline", IconifyIconOnline);
 app.component("FontIcon", FontIcon);
 app.component("SrmTable", SrmTable);
+app.component("SrmFilter", SrmFilter);
 app.use(JsonViewer);
 import { Auth } from "@/components/ReAuth";
 app.component("Auth", Auth);

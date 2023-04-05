@@ -95,7 +95,7 @@ const whiteList = ["/login"];
 
 router.beforeEach(async (to: toRouteType, _from, next) => {
   // 获取token 判断有无token判断是否跳转登录页
-  const token = getToken();
+  // const token = getToken();
   NProgress.start();
   const externalLink = isUrl(to?.name as string);
   if (!externalLink) {
@@ -106,36 +106,38 @@ router.beforeEach(async (to: toRouteType, _from, next) => {
       else document.title = item.meta.title as string;
     });
   }
+  await initRouter();
+  next();
   /** 如果已经登录并存在登录信息后不能跳转到路由白名单，而是继续保持在当前页面 */
-  if (token && JSON.parse(window.localStorage.getItem("roles"))) {
-    if (to.fullPath === "/login") {
-      next({ path: "/" });
-    } else {
-      if (
-        usePermissionStoreHook().wholeMenus.length === 0 &&
-        to.path !== "/login"
-      ) {
-        try {
-          await useUserStoreHook().handleGetUserInfo();
-          await useUserStoreHook().getConfigListBefore();
-        } catch (error) {
-          next({ path: "/login" });
-        }
-        await initRouter();
-      }
-      next();
-    }
-  } else {
-    if (to.path !== "/login") {
-      if (whiteList.indexOf(to.path) !== -1) {
-        next();
-      } else {
-        next({ path: "/login" });
-      }
-    } else {
-      next();
-    }
-  }
+  // if (token && JSON.parse(window.localStorage.getItem("roles"))) {
+  //   if (to.fullPath === "/login") {
+  //     next({ path: "/" });
+  //   } else {
+  //     if (
+  //       usePermissionStoreHook().wholeMenus.length === 0 &&
+  //       to.path !== "/login"
+  //     ) {
+  //       try {
+  //         await useUserStoreHook().handleGetUserInfo();
+  //         await useUserStoreHook().getConfigListBefore();
+  //       } catch (error) {
+  //         next({ path: "/login" });
+  //       }
+  //       await initRouter();
+  //     }
+  //     next();
+  //   }
+  // } else {
+  //   if (to.path !== "/login") {
+  //     if (whiteList.indexOf(to.path) !== -1) {
+  //       next();
+  //     } else {
+  //       next({ path: "/login" });
+  //     }
+  //   } else {
+  //     next();
+  //   }
+  // }
 });
 
 router.afterEach(() => {

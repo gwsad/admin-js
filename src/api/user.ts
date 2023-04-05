@@ -65,3 +65,76 @@ export const configListBefore = params => {
     params: { value: params }
   });
 };
+
+// admin;
+
+// 登录
+export const login = (data?: object) => {
+  return http.request<UserResult>("post", "/admin/auth/login", { data });
+};
+
+// 获取用户列表
+export const getUserList = (data?: object) => {
+  return http.request<UserResult>("get", "/admin/user/query", { params: data });
+};
+
+// 银行列表
+export const getBankList = () => {
+  return http.request<UserResult>("get", "/admin/bank/list");
+};
+
+// 新增银行
+export const addBank = (data?: object) => {
+  return http.request<UserResult>("post", "/admin/bank/add", { data });
+};
+
+// 订单列表
+export const getOrderList = (data?: object) => {
+  return http.request<UserResult>("get", "/admin/order/list", { params: data });
+};
+
+// 提现列表
+export const getWithdrawList = (data?: object) => {
+  return http.request<UserResult>("get", "/admin/withdraw/list", {
+    params: data
+  });
+};
+
+// 获取卡片分类
+export const getCardType = () => {
+  return http.request<UserResult>("get", "/admin/card/categorylist");
+};
+
+// 获取卡片列表
+export const getCardList = (id, data) => {
+  return http.request<UserResult>("get", `/admin/card/${id}/list`, {
+    params: data
+  });
+};
+
+// 注销用户
+export const logout = userId => {
+  return http.request<UserResult>("delete", `/admin/user/${userId}`);
+};
+
+// 操作提现
+export const optionWithdraw = data => {
+  return http.request("post", `/admin/withdraw/${data.id}`, {
+    data: data.type
+  });
+};
+
+// 订单操作
+export const optionOrder = data => {
+  return http.request("post", `/admin/order/${data.id}`, { data: data.type });
+};
+
+// 设置热门
+export const setHot = (id, data) => {
+  return http.request("put", `/admin/card/${id}`, { data });
+};
+
+// 新增卡券
+export const addCard = (id, data) => {
+  return http.request("post", `/admin/card/${id}/add`, { data });
+};

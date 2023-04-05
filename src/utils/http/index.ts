@@ -51,7 +51,6 @@ class PureHttp {
     PureHttp.axiosInstance.interceptors.request.use(
       async (config: PureHttpRequestConfig) => {
         // 开启进度条动画
-        NProgress.start();
         // 优先判断post/get等方法是否传入回掉，否则执行初始化设置等回掉
         if (typeof config.beforeRequestCallback === "function") {
           config.beforeRequestCallback(config);
@@ -61,32 +60,11 @@ class PureHttp {
           PureHttp.initConfig.beforeRequestCallback(config);
           return config;
         }
-        /** 请求白名单，放置一些不需要token的接口（通过设置请求白名单，防止token过期后再请求造成的死循环问题） */
-        const whiteList = ["/api-uaa/oauth/token", "/login", "/sendLoginSMS"];
-
+        const token = getToken();
+        token && (config.headers["Authorization"] = "Bearer " + token);
         // 定义请求链接
         config.url = `${VITE_GLOB_API_URL}${config.url}`;
-        // 添加默认token
-        const token = getToken();
-
-        if (token) {
-          config.headers["Authorization"] = "Bearer " + token;
-        } else {
-          config.headers["Authorization"] =
-            "Basic " +
-            window.btoa(
-              defaultProjectConfig.clientId +
-                ":" +
-                defaultProjectConfig.clientSecret
-            );
-        }
-
-        return whiteList.some(v => config.url.indexOf(v) > -1)
-          ? config
-          : new Promise(resolve => {
-              config.headers["Authorization"] = "Bearer " + getToken();
-              resolve(config);
-            });
+        return config;
       },
       error => {
         return Promise.reject(error);
@@ -116,22 +94,9 @@ class PureHttp {
         if (code === 1001) {
           await useUserStoreHook().logOut();
         }
-        if (code !== 0) {
-          ElMessage({
-            message: data.resp_msg || data.message,
-            duration: 1000,
-            type: "error"
-          });
-        }
         return response.data;
       },
       (error: PureHttpError) => {
-        error.response.data.error === "Unauthorized" &&
-          ElMessage({
-            message: "暂无权限，请联系管理员",
-            duration: 1000,
-            type: "error"
-          });
         const $error = error;
         $error.isCancelRequest = Axios.isCancel($error);
         // 关闭进度条动画

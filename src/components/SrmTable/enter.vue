@@ -77,7 +77,7 @@ export default defineComponent({
       () => props.sourceData || [],
       val => {
         // 外部传入数据改变
-        if (val.length > 0) {
+        if (val.length > 0 || !props.api) {
           tableData.value = val;
           Object.assign(pageOpt.value, props.pageRequest, {
             total: props.listTotal

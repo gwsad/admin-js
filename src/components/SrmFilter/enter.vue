@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onBeforeMount, reactive } from "vue";
+import { defineComponent, onBeforeMount, reactive, ref } from "vue";
 import { filterProps } from "./src/props";
 export default defineComponent({
   name: "SrmFilter",
@@ -105,7 +105,7 @@ export default defineComponent({
   setup(props, ctx) {
     const selectOptions = reactive([]); // 选择框的选项
     const initSearchParams = reactive({}); // 初始化的查询参数
-    const searchParamsFilter = reactive({}); // 查询参数
+    const searchParamsFilter = ref({}); // 查询参数
 
     // 绑定属性 继承element相关组件的全部属性
     function setAttrs(params) {
@@ -116,12 +116,13 @@ export default defineComponent({
 
     // 查询按钮
     function handleSearch() {
-      const cpValue = JSON.parse(JSON.stringify(searchParamsFilter));
+      const cpValue = JSON.parse(JSON.stringify(searchParamsFilter.value));
       ctx.emit("search", cpValue);
     }
     // 重置按钮
     function handleReset() {
-      Object.assign(searchParamsFilter, initSearchParams);
+      searchParamsFilter.value = {};
+      // Object.assign(searchParamsFilter, initSearchParams);
       const cpValue = JSON.parse(JSON.stringify(initSearchParams));
       ctx.emit("reset", cpValue);
     }
@@ -142,7 +143,7 @@ export default defineComponent({
     // 初始化搜索内容
     function init() {
       Object.assign(
-        searchParamsFilter,
+        searchParamsFilter.value,
         JSON.parse(JSON.stringify(props.searchParams))
       );
       Object.assign(
