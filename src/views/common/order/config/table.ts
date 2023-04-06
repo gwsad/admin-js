@@ -16,7 +16,7 @@ export const TableConfig = [
                 type: "primary",
                 size: "small"
               },
-              row.cardInfos ? row.cardInfos[0]?.number : "-"
+              row.cardInfo ? row?.cardInfo?.number : "-"
             )
           ];
         }
@@ -36,14 +36,14 @@ export const TableConfig = [
                 type: "primary",
                 size: "small"
               },
-              row.cardInfos ? row?.cardInfos[0]?.pass : "-"
+              row.cardInfo ? row?.cardInfo?.pass : "-"
             )
           ];
         }
       }
     ]
   },
-  { prop: "facevalue", label: "面值（HK$）" },
+  { prop: "amount", label: "面值（HK$）" },
   {
     prop: "option",
     label: "订单状态",
@@ -84,7 +84,9 @@ export const TableConfig = [
                 type: "primary",
                 text: "交易成功",
                 size: "small",
-                style: `display: ${row.status === 1 ? "inline-block" : "none"}`,
+                style: `display: ${
+                  row.status.code === 1 ? "inline-block" : "none"
+                }`,
                 onClick() {
                   vm.emit("onSuccess", row);
                 }
