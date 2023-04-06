@@ -12,10 +12,8 @@ import { h, reactive, computed, onMounted, defineComponent } from "vue";
 
 import navbar from "./components/navbar.vue";
 import appMain from "./components/appMain.vue";
-import setting from "./components/setting/enter.vue";
 import Vertical from "./components/sidebar/vertical.vue";
 import Horizontal from "./components/sidebar/horizontal.vue";
-import backTop from "@/assets/svg/back_top.svg?component";
 
 const { isDark } = useDark();
 const { layout } = useLayout();
@@ -154,25 +152,12 @@ const layoutHeader = defineComponent({
         pureSetting.hiddenSideBar ? 'main-hidden' : ''
       ]"
     >
-      <div v-if="set.fixedHeader">
-        <layout-header />
-        <!-- 主体内容 -->
-        <app-main :fixed-header="set.fixedHeader" />
-      </div>
-      <el-scrollbar v-else>
-        <el-backtop
-          title="回到顶部"
-          target=".main-container .el-scrollbar__wrap"
-        >
-          <backTop />
-        </el-backtop>
+      <el-scrollbar>
         <layout-header />
         <!-- 主体内容 -->
         <app-main :fixed-header="set.fixedHeader" />
       </el-scrollbar>
     </div>
-    <!-- 系统设置 -->
-    <setting />
   </div>
 </template>
 

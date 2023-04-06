@@ -1,14 +1,11 @@
 <script lang="ts" setup>
-import { defineComponent, reactive, ref, onBeforeMount } from "vue";
+import { reactive, ref, onBeforeMount } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { TableConfig } from "./config/table";
 import { ShareConfig } from "./config/share";
 import { SearchForm } from "./config/filter";
 import { getUserList, logout } from "@/api/user";
 
-defineComponent({
-  name: "PageFooter"
-});
 const tableConfig: any = TableConfig;
 const searchForm: any = SearchForm;
 const shareConfig: any = ShareConfig;

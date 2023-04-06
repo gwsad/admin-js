@@ -1,12 +1,9 @@
 <script lang="ts" setup>
-import { defineComponent, ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { TableConfig } from "./config/table";
 import { getBankList, addBank } from "@/api/user";
 
-defineComponent({
-  name: "PageFooter"
-});
 const tableConfig: any = TableConfig;
 const sourceData: any = ref([]);
 const dialogVisible = ref(false); // 配置信息弹窗

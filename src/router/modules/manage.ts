@@ -1,16 +1,14 @@
 export default {
   path: "/manage",
   redirect: "/manage/user",
-  name: "管理列表",
   meta: {
-    icon: "informationLine",
+    icon: "class",
     title: "管理列表",
-    showLink: true,
-    rank: 11
+    rank: 2
   },
   children: [
     {
-      path: "/manage/user",
+      path: "/user",
       name: "user",
       component: () => import("@/views/common/user/enter.vue"),
       meta: {
@@ -18,7 +16,7 @@ export default {
       }
     },
     {
-      path: "/manage/card",
+      path: "/card",
       name: "card",
       component: () => import("@/views/common/card/enter.vue"),
       meta: {
@@ -26,7 +24,7 @@ export default {
       }
     },
     {
-      path: "/manage/bank",
+      path: "/bank",
       name: "bank",
       component: () => import("@/views/common/bank/enter.vue"),
       meta: {
@@ -34,12 +32,19 @@ export default {
       }
     },
     {
-      path: "/manage/comment",
-      name: "comment",
-      component: () => import("@/views/common/comment/enter.vue"),
+      path: "/order",
+      name: "order",
+      component: () => import("@/views/common/order/enter.vue"),
       meta: {
-        showLink: false,
-        title: "评论管理"
+        title: "订单管理"
+      }
+    },
+    {
+      path: "/withdraw",
+      name: "withdraw",
+      component: () => import("@/views/common/withdraw/enter.vue"),
+      meta: {
+        title: "提现管理"
       }
     }
   ]

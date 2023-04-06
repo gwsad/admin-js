@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Logo from "./logo.vue";
 import { useRoute } from "vue-router";
 import { emitter } from "@/utils/mitt";
 import SidebarItem from "./sidebarItem.vue";

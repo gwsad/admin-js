@@ -7,14 +7,12 @@ import {
   PureHttpError,
   RequestMethods,
   PureHttpResponse,
-  PureHttpRequestConfig,
-  defaultProjectConfig
+  PureHttpRequestConfig
 } from "./types.d";
 import { stringify } from "qs";
 import NProgress from "../progress";
 import { getToken } from "@/utils/auth";
 const { VITE_GLOB_API_URL } = import.meta.env;
-import { ElMessage } from "element-plus";
 import { useUserStoreHook } from "@/store/modules/user";
 // 相关配置请参考：www.axios-js.com/zh-cn/docs/#axios-request-config-1
 const defaultConfig: AxiosRequestConfig = {

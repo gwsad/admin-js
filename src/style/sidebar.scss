@@ -63,7 +63,7 @@
     .fixed-header {
       width: 100% !important;
 
-      +.app-main {
+      + .app-main {
         padding-top: 37px !important;
       }
     }
@@ -149,7 +149,7 @@
       }
     }
 
-    .is-active>.el-sub-menu__title,
+    .is-active > .el-sub-menu__title,
     .is-active.submenu-title-noDropdown {
       color: "#fff" !important;
 
@@ -293,7 +293,7 @@
       }
     }
 
-    .is-active>.el-sub-menu__title,
+    .is-active > .el-sub-menu__title,
     .is-active.submenu-title-noDropdown {
       color: "#fff" !important;
 
@@ -320,13 +320,13 @@
       }
     }
 
-    &>.el-menu {
+    & > .el-menu {
       i {
         margin-right: 20px;
       }
     }
 
-    .is-active>.el-sub-menu__title,
+    .is-active > .el-sub-menu__title,
     .is-active.submenu-title-noDropdown {
       color: "#fff" !important;
 
@@ -384,7 +384,7 @@
 
   /* horizontal 菜单 */
   .el-menu--horizontal {
-    &>.el-sub-menu .el-sub-menu__icon-arrow {
+    & > .el-sub-menu .el-sub-menu__icon-arrow {
       position: static !important;
       margin-top: 0;
     }
@@ -407,7 +407,7 @@
     }
 
     /* 无子菜单时激活 border-bottom */
-    .router-link-exact-active>.submenu-title-noDropdown {
+    .router-link-exact-active > .submenu-title-noDropdown {
       height: 60px;
       border-bottom: 2px solid var(--el-menu-active-color);
     }
@@ -423,7 +423,7 @@
       }
     }
 
-    .is-active>.el-sub-menu__title,
+    .is-active > .el-sub-menu__title,
     .is-active.submenu-title-noDropdown {
       color: "#fff" !important;
 
@@ -432,7 +432,7 @@
       }
     }
 
-    .nest-menu .el-sub-menu>.el-sub-menu__title,
+    .nest-menu .el-sub-menu > .el-sub-menu__title,
     .el-menu-item {
       &:hover {
         color: "#fff" !important;
@@ -470,7 +470,7 @@
     transform: translateY(0);
   }
 
-  .el-menu--collapse .outer-most.el-sub-menu>.el-sub-menu__title::before,
+  .el-menu--collapse .outer-most.el-sub-menu > .el-sub-menu__title::before,
   .el-menu--collapse .submenu-title-noDropdown.outer-most::before {
     content: "";
     display: block;
@@ -541,8 +541,8 @@ body[layout="vertical"] {
     /* 菜单折叠 */
     .el-menu--collapse {
       .el-sub-menu {
-        &>.el-sub-menu__title {
-          &>span {
+        & > .el-sub-menu__title {
+          & > span {
             height: 0;
             width: 0;
             overflow: hidden;
@@ -624,8 +624,8 @@ body[layout="mix"] {
     /* 菜单折叠 */
     .el-menu--collapse {
       .el-sub-menu {
-        &>.el-sub-menu__title {
-          &>span {
+        & > .el-sub-menu__title {
+          & > span {
             height: 0;
             width: 0;
             overflow: hidden;

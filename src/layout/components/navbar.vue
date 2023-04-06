@@ -4,7 +4,6 @@ import { useNav } from "@/layout/hooks/useNav";
 import Breadcrumb from "./sidebar/breadCrumb.vue";
 import topCollapse from "./sidebar/topCollapse.vue";
 import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
-import { useUserStoreHook } from "@/store/modules/user";
 
 const {
   layout,
@@ -38,12 +37,9 @@ const {
     <div v-if="layout === 'vertical'" class="vertical-header-right">
       <!-- 退出登录 -->
       <el-dropdown trigger="click">
-        <span class="mr-10 select-none el-dropdown-link navbar-bg-hover">
+        <span class="el-dropdown-link navbar-bg-hover select-none">
           <img
-            :src="`https://storageenergy.oss-cn-shanghai.aliyuncs.com${
-              useUserStoreHook().userInfo.headImgUrl || ''
-            }
-            `"
+            src="https://avatars.githubusercontent.com/u/44761321?v=4"
             :style="avatarsStyle"
           />
           <p v-if="username" class="dark:text-white">{{ username }}</p>
@@ -113,7 +109,7 @@ const {
 }
 
 .logout {
-  min-width: 120px;
+  max-width: 120px;
 
   ::v-deep(.el-dropdown-menu__item) {
     min-width: 100%;

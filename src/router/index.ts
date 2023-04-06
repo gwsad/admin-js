@@ -1,5 +1,4 @@
 // import "@/utils/sso";
-import { getConfig } from "@/config";
 import NProgress from "@/utils/progress";
 import { usePermissionStoreHook } from "@/store/modules/permission";
 import { useUserStoreHook } from "@/store/modules/user";
@@ -18,7 +17,6 @@ import {
 } from "./utils";
 import { buildHierarchyTree } from "@/utils/tree";
 import { isUrl } from "@pureadmin/utils";
-import { getToken } from "@/utils/auth";
 
 import remainingRouter from "./modules/remaining";
 
@@ -90,54 +88,22 @@ export function resetRouter() {
   });
 }
 
-/** 路由白名单 */
-const whiteList = ["/login"];
-
 router.beforeEach(async (to: toRouteType, _from, next) => {
-  // 获取token 判断有无token判断是否跳转登录页
-  // const token = getToken();
+  const fileUrl = useUserStoreHook().fileUrl;
+  if (fileUrl.indexOf("http") === -1) {
+    useUserStoreHook().getConfigListBefore();
+  }
   NProgress.start();
   const externalLink = isUrl(to?.name as string);
   if (!externalLink) {
     to.matched.some(item => {
       if (!item.meta.title) return "";
-      const Title = getConfig().Title;
-      if (Title) document.title = `${item.meta.title} | ${Title}`;
-      else document.title = item.meta.title as string;
     });
   }
-  await initRouter();
-  next();
+  usePermissionStoreHook().wholeMenus.length === 0 && initRouter(router);
   /** 如果已经登录并存在登录信息后不能跳转到路由白名单，而是继续保持在当前页面 */
-  // if (token && JSON.parse(window.localStorage.getItem("roles"))) {
-  //   if (to.fullPath === "/login") {
-  //     next({ path: "/" });
-  //   } else {
-  //     if (
-  //       usePermissionStoreHook().wholeMenus.length === 0 &&
-  //       to.path !== "/login"
-  //     ) {
-  //       try {
-  //         await useUserStoreHook().handleGetUserInfo();
-  //         await useUserStoreHook().getConfigListBefore();
-  //       } catch (error) {
-  //         next({ path: "/login" });
-  //       }
-  //       await initRouter();
-  //     }
-  //     next();
-  //   }
-  // } else {
-  //   if (to.path !== "/login") {
-  //     if (whiteList.indexOf(to.path) !== -1) {
-  //       next();
-  //     } else {
-  //       next({ path: "/login" });
-  //     }
-  //   } else {
-  //     next();
-  //   }
-  // }
+
+  next();
 });
 
 router.afterEach(() => {

@@ -169,9 +169,11 @@ export default defineComponent({
     border: 1px solid #dcdfe6;
     border-radius: 2px;
   }
+
   .pagination {
     display: flex;
     justify-content: space-between;
+
     .el-pagination {
       margin-top: 10px;
     }

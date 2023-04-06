@@ -5,7 +5,8 @@ import { useRenderIcon } from "@/components/ReIcon/src/hooks";
 import { getParentPaths, findRouteByPath } from "@/router/utils";
 import { usePermissionStoreHook } from "@/store/modules/permission";
 import LogoutCircleRLine from "@iconify-icons/ri/logout-circle-r-line";
-import { useUserStoreHook } from "@/store/modules/user";
+import Setting from "@iconify-icons/ri/settings-3-line";
+
 const menuRef = ref();
 const defaultActive = ref(null);
 
@@ -14,6 +15,7 @@ const {
   device,
   routers,
   logout,
+  onPanel,
   menuSelect,
   resolvePath,
   username,
@@ -89,9 +91,9 @@ watch(
     <div class="horizontal-header-right">
       <!-- 退出登录 -->
       <el-dropdown trigger="click">
-        <span class="el-dropdown-link navbar-bg-hover select-none mr-10">
+        <span class="el-dropdown-link navbar-bg-hover select-none">
           <img
-            :src="useUserStoreHook().userInfo.headImgUrl || ''"
+            src="https://avatars.githubusercontent.com/u/44761321?v=4"
             :style="avatarsStyle"
           />
           <p v-if="username" class="dark:text-white">{{ username }}</p>
@@ -108,6 +110,13 @@ watch(
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <span
+        class="set-icon navbar-bg-hover"
+        title="打开项目配置"
+        @click="onPanel"
+      >
+        <IconifyIconOffline :icon="Setting" />
+      </span>
     </div>
   </div>
 </template>
@@ -118,7 +127,7 @@ watch(
 }
 
 .logout {
-  min-width: 120px;
+  max-width: 120px;
 
   ::v-deep(.el-dropdown-menu__item) {
     min-width: 100%;

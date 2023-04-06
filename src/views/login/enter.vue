@@ -123,6 +123,7 @@ onBeforeUnmount(() => {
   background: #eff4ff;
   min-height: 100vh;
 }
+
 .login-container {
   width: 1080px;
   height: 590px;
@@ -135,15 +136,18 @@ onBeforeUnmount(() => {
   top: 50%;
   transform: translate(-50%, -50%);
 }
+
 .login-container__left {
   width: 50%;
   height: 100%;
   border-radius: 15px 0 0 15px;
 }
+
 .login-container__right {
   margin: auto;
   text-align: left;
   transition: all 1s linear;
+
   h2 {
     margin-bottom: 48px;
   }
@@ -152,6 +156,7 @@ onBeforeUnmount(() => {
 .special-form {
   position: relative;
   margin-bottom: 8px;
+
   span {
     position: absolute;
     right: 16px;
@@ -159,6 +164,7 @@ onBeforeUnmount(() => {
     cursor: pointer;
   }
 }
+
 .special-input {
   width: 360px;
   height: 40px;
@@ -174,6 +180,7 @@ onBeforeUnmount(() => {
 .disabled {
   color: #999999 !important;
 }
+
 :deep(.el-input-group__append, .el-input-group__prepend) {
   padding: 0;
 }
@@ -186,6 +193,7 @@ onBeforeUnmount(() => {
 .el-input--large {
   --el-input-height: none;
 }
+
 .el-input {
   display: inline-block;
 }

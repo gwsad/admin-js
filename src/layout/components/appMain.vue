@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useGlobal } from "@pureadmin/utils";
-import backTop from "@/assets/svg/back_top.svg?component";
 import { h, computed, Transition, defineComponent } from "vue";
 import { usePermissionStoreHook } from "@/store/modules/permission";
 
@@ -81,9 +80,6 @@ const transitionMain = defineComponent({
     <router-view>
       <template #default="{ Component, route }">
         <el-scrollbar v-if="props.fixedHeader">
-          <el-backtop title="回到顶部" target=".app-main .el-scrollbar__wrap">
-            <backTop />
-          </el-backtop>
           <transitionMain :route="route">
             <keep-alive
               v-if="keepAlive"
