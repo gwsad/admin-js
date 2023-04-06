@@ -105,7 +105,9 @@ export const TableConfig = [
                 type: "danger",
                 text: "交易失败",
                 size: "small",
-                style: `display: ${row.status === 1 ? "inline-block" : "none"}`,
+                style: `display: ${
+                  row.status.code === 1 ? "inline-block" : "none"
+                }`,
                 onClick() {
                   vm.emit("onError", row);
                 }
