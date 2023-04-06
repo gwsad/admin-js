@@ -27,6 +27,7 @@ const getCardTypeListFn = async () => {
 };
 // 获取卡片列表
 const getCardListFn = async () => {
+  sourceData.value = [];
   const { data } = await getCardList(activeName.value, reqData.value);
   sourceData.value = data;
 };
@@ -41,6 +42,7 @@ const cardInfo = ref({
 // 切换tab
 const onHandleClick = value => {
   activeName.value = value.props.name;
+  getCardListFn();
 };
 
 const onCurrentChange = type => {
