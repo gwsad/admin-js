@@ -33,5 +33,4 @@ export type userType = {
   username?: string;
   roles?: Array<string>;
   userInfo?: any;
-  fileUrl?: any;
 };

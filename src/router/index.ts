@@ -89,10 +89,6 @@ export function resetRouter() {
 }
 
 router.beforeEach(async (to: toRouteType, _from, next) => {
-  const fileUrl = useUserStoreHook().fileUrl;
-  if (fileUrl.indexOf("http") === -1) {
-    useUserStoreHook().getConfigListBefore();
-  }
   NProgress.start();
   const externalLink = isUrl(to?.name as string);
   if (!externalLink) {

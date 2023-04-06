@@ -59,12 +59,6 @@ export const refreshTokenApi = (data?: object) => {
 export const getUserInfo = () => {
   return http.request<void>("get", "/api-user/users/current");
 };
-//获取图片域名
-export const configListBefore = params => {
-  return http.request<void>("get", "/api-user/configListBefore/", {
-    params: { value: params }
-  });
-};
 
 // admin;
 
