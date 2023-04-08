@@ -116,10 +116,15 @@ const onAddCard = async () => {
     order: 0,
     isHot: 0
   };
-  await addCard(activeName.value, _data);
+  if (dialogTitle.value === "新增卡片") {
+    await addCard(activeName.value, _data);
+  } else {
+    await setHot(choseId.value, _data);
+  }
   getCardListFn();
   dialogVisible.value = false;
   dialogTitle.value = "新增卡片";
+  choseId.value = "";
 };
 
 // 成功上传卡片
@@ -172,8 +177,10 @@ const onHot = (data: any) => {
     });
 };
 const dialogTitle = ref("新增卡片");
+const choseId = ref("");
 // 修改卡片
 const onEdit = (data: any) => {
+  choseId.value = data._id;
   dialogTitle.value = "修改卡片";
   dynamicTags.value = data.facevalues;
   cardInfo.value = {
@@ -206,15 +213,6 @@ const onEdit = (data: any) => {
     <el-button class="mb-20" type="primary" @click="optionDialog"
       >新增</el-button
     >
-
-    <!-- <div>
-      <SrmFilter
-        :items="searchForm"
-        :search-params="form"
-        @search="onSearch"
-        @reset="onSearch"
-      />
-    </div> -->
     <SrmTable
       :columns="tableConfig"
       :sourceData="sourceData"
@@ -287,11 +285,6 @@ const onEdit = (data: any) => {
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
         </el-form-item>
-        <!-- <form method="POST" :action="UploadUrl" enctype="multipart/form-data">
-          title: <input name="title" />
-          file: <input name="file" type="file" />
-          <button type="submit">Upload</button>
-        </form> -->
       </el-form>
       <template #footer>
         <span class="dialog-footer">
