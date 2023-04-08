@@ -125,6 +125,12 @@ const onAddCard = async () => {
   dialogVisible.value = false;
   dialogTitle.value = "新增卡片";
   choseId.value = "";
+  cardInfo.value = {
+    name: "",
+    discount: null,
+    facevalue: [],
+    imageUrl: ""
+  };
 };
 
 // 成功上传卡片
