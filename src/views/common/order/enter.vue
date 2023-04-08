@@ -17,6 +17,7 @@ const form: any = reactive({}); // 筛选项
 
 onBeforeMount(() => {
   getOrderListFn();
+  console.log("onBeforeMount");
 });
 
 const getOrderListFn = async () => {

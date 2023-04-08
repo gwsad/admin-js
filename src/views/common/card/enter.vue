@@ -41,6 +41,7 @@ const cardInfo = ref({
 
 // 切换tab
 const onHandleClick = value => {
+  console.log("value", value);
   activeName.value = value.props.name;
   getCardListFn();
 };
