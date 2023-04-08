@@ -98,6 +98,18 @@ export const TableConfig = [
             h(
               ElButton,
               {
+                type: "primary",
+                text: "修改",
+                size: "small",
+                onClick() {
+                  vm.emit("onEdit", row);
+                }
+              },
+              "修改"
+            ),
+            h(
+              ElButton,
+              {
                 type: "danger",
                 text: "删除",
                 size: "small",

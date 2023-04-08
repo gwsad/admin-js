@@ -119,6 +119,7 @@ const onAddCard = async () => {
   await addCard(activeName.value, _data);
   getCardListFn();
   dialogVisible.value = false;
+  dialogTitle.value = "新增卡片";
 };
 
 // 成功上传卡片
@@ -170,6 +171,19 @@ const onHot = (data: any) => {
       console.log("取消修改");
     });
 };
+const dialogTitle = ref("新增卡片");
+// 修改卡片
+const onEdit = (data: any) => {
+  dialogTitle.value = "修改卡片";
+  dynamicTags.value = data.facevalues;
+  cardInfo.value = {
+    name: data.name,
+    discount: data.discount,
+    facevalue: data.facevalues,
+    imageUrl: data.image
+  };
+  dialogVisible.value = true;
+};
 </script>
 
 <template>
@@ -207,13 +221,14 @@ const onHot = (data: any) => {
       :reqData="reqData"
       @onDelete="onDelete"
       @onHot="onHot"
+      @onEdit="onEdit"
       @onChangeHot="onChangeHot"
       @currentChange="onCurrentChange"
     />
     <el-dialog
       v-if="dialogVisible"
       v-model="dialogVisible"
-      title="新增卡片"
+      :title="dialogTitle"
       width="50%"
     >
       <el-form :model="cardInfo" label-width="100px">
