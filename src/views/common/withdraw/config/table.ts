@@ -41,50 +41,50 @@ export const TableConfig = [
       }
     ]
   },
-  {
-    prop: "phone",
-    width: "150px",
-    label: "USDT地址（erc20）",
-    slots: [
-      {
-        render(h, vm, row) {
-          return [
-            h(
-              "span",
-              {
-                type: "primary"
-              },
-              row.accountInfo.usdt && row.accountInfo.usdt.name === "erc20"
-                ? row.accountInfo.usdt.address
-                : "-"
-            )
-          ];
-        }
-      }
-    ]
-  },
-  {
-    prop: "phone",
-    width: "150px",
-    label: "USDT地址（trc20）",
-    slots: [
-      {
-        render(h, vm, row) {
-          return [
-            h(
-              "span",
-              {
-                type: "primary"
-              },
-              row.accountInfo.usdt && row.accountInfo.usdt.name === "trc20"
-                ? row.accountInfo.usdt.address
-                : "-"
-            )
-          ];
-        }
-      }
-    ]
-  },
+  // {
+  //   prop: "phone",
+  //   width: "150px",
+  //   label: "USDT地址（erc20）",
+  //   slots: [
+  //     {
+  //       render(h, vm, row) {
+  //         return [
+  //           h(
+  //             "span",
+  //             {
+  //               type: "primary"
+  //             },
+  //             row.accountInfo.usdt && row.accountInfo.usdt.name === "erc20"
+  //               ? row.accountInfo.usdt.address
+  //               : "-"
+  //           )
+  //         ];
+  //       }
+  //     }
+  //   ]
+  // },
+  // {
+  //   prop: "phone",
+  //   width: "150px",
+  //   label: "USDT地址（trc20）",
+  //   slots: [
+  //     {
+  //       render(h, vm, row) {
+  //         return [
+  //           h(
+  //             "span",
+  //             {
+  //               type: "primary"
+  //             },
+  //             row.accountInfo.usdt && row.accountInfo.usdt.name === "trc20"
+  //               ? row.accountInfo.usdt.address
+  //               : "-"
+  //           )
+  //         ];
+  //       }
+  //     }
+  //   ]
+  // },
   {
     prop: "phone",
     width: "200px",
